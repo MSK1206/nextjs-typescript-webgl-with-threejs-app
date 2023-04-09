@@ -1,7 +1,6 @@
 import Head from 'next/head'
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { useEffect, useRef } from 'react'
 import styles from '@/styles/Home.module.css'
@@ -9,8 +8,8 @@ import styles from '@/styles/Home.module.css'
 export default function Home() {
   const mountRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
-    const viewWidth = 1200
-    const viewHeight = 600
+    const viewWidth = 660
+    const viewHeight = 350
     const renderer = new THREE.WebGLRenderer()
     renderer.setSize(viewWidth, viewHeight)
     const threeModel = mountRef.current
@@ -20,12 +19,12 @@ export default function Home() {
     scene.background = new THREE.Color(0xbfe3dd)
 
     const camera = new THREE.PerspectiveCamera(
-      45,
+      70,
       window.innerWidth / window.innerHeight,
       1,
-      500
+      600
     )
-    camera.position.set(-5, 3, 10)
+    camera.position.set(0, 0, 40)
 
     const controls = new OrbitControls(camera, renderer.domElement)
     controls.target.set(0, 0.5, 0)
@@ -33,20 +32,17 @@ export default function Home() {
     controls.enablePan = false
     controls.enableDamping = true
 
-    const material = new THREE.LineBasicMaterial({ color: 0x0000ff })
+    const frontlight = new THREE.PointLight(0xffffff)
+    frontlight.position.set(0, 0, 40)
+    scene.add(frontlight)
 
-    const points = []
-    points.push(new THREE.Vector3(-10, 0, 0))
-    points.push(new THREE.Vector3(0, 10, 0))
-    points.push(new THREE.Vector3(10, 0, 0))
-
-    const geometry = new THREE.BufferGeometry().setFromPoints(points)
-
-    const line = new THREE.Line(geometry, material)
+    const backlight = new THREE.PointLight(0xffffff)
+    backlight.position.set(0, 0, -40)
+    scene.add(backlight)
 
     const loader = new GLTFLoader()
     loader.load(
-      './model/house.glb',
+      './model/Totoro.glb',
       function (gltf) {
         scene.add(gltf.scene)
       },
@@ -56,12 +52,7 @@ export default function Home() {
       }
     )
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0)
-    const x = 597
-    const y = 213
-
     const tick = () => {
-      scene.add(line, directionalLight)
       renderer.render(scene, camera)
 
       requestAnimationFrame(tick)
