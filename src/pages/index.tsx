@@ -9,7 +9,7 @@ export default function Home() {
   const mountRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     const viewWidth = 660
-    const viewHeight = 350
+    const viewHeight = 660
     const renderer = new THREE.WebGLRenderer()
     renderer.setSize(viewWidth, viewHeight)
     const threeModel = mountRef.current
@@ -19,15 +19,15 @@ export default function Home() {
     scene.background = new THREE.Color(0xbfe3dd)
 
     const camera = new THREE.PerspectiveCamera(
-      70,
+      75,
       window.innerWidth / window.innerHeight,
       1,
-      600
+      1000
     )
     camera.position.set(0, 0, 40)
 
     const controls = new OrbitControls(camera, renderer.domElement)
-    controls.target.set(0, 0.5, 0)
+    controls.target.set(0, 0, -40)
     controls.update()
     controls.enablePan = false
     controls.enableDamping = true
