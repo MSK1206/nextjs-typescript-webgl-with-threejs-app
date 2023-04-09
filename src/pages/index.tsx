@@ -34,11 +34,9 @@ export default function Home() {
 
     const frontlight = new THREE.PointLight(0xffffff)
     frontlight.position.set(0, 0, 40)
-    scene.add(frontlight)
 
     const backlight = new THREE.PointLight(0xffffff)
     backlight.position.set(0, 0, -40)
-    scene.add(backlight)
 
     const loader = new GLTFLoader()
     loader.load(
@@ -53,6 +51,7 @@ export default function Home() {
     )
 
     const tick = () => {
+      scene.add(frontlight, backlight)
       renderer.render(scene, camera)
 
       requestAnimationFrame(tick)
